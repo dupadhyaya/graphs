@@ -1,8 +1,16 @@
+# Pictogram
+#check if file exists
+
 library(png)
-pictogram(icon=man,
+star = readPNG("star.png")
+str(star)
+#or read the file from other location
+#man <- readPNG(file.choose())
+
+?pictogram
+pictogram(icon=star,
           n=c(12,35,52),
           grouplabels=c("dudes","chaps","lads"))
-man <- readPNG(file.choose())
 
 red.man <- man
 red.man[,,1] <- man[,,4] # fill in red dimension
@@ -57,5 +65,11 @@ source_github("https://raw.githubusercontent.com/robertgrant/pictogram/master/pi
 require(png)
 
 img <- readPNG(system.file("img", "Rlogo.png", package="png"))
+source("https://raw.githubusercontent.com/robertgrant/pictogram/master/pictogram.R")
+graphics.off()# for any error messages
 pictogram(icon = img, n = c( 12, 35, 7),
           grouplabels=c("12 R logos","35 R logos","7 R logos"))
+
+
+#different images for different layers
+
