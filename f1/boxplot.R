@@ -17,13 +17,6 @@ boxplot(len~supp*dose, data=ToothGrowth, notch=TRUE,
         col=(c("gold","darkgreen")),
         main="Tooth Growth", xlab="Suppliment and Dose")
 
-
-
-
-
-
-
-
 # BoxPlot 3 -------------
 data    <- c(0.4, 0.7, 0.75, 0.82, 0.9)
 data

@@ -6,4 +6,5 @@
 #let's check co-relation between Item cost, weight, visibility along with Outlet establishment year and Outlet sales from below plot
 
 library(corrgram)
+#data pertains to bigmart
 corrgram(data1, order=NULL, panel=panel.shade, text.panel=panel.txt,  main="Correlogram") 
