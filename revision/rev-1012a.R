@@ -78,9 +78,3 @@ ggplot(df, aes(x=wt, y=mpg)) + geom_point(size=3) + geom_smooth(method='lm', se=
 
 ggplot(women, aes(x=height, y=weight)) + geom_point(size=3) + geom_smooth(method='lm', se=T) 
 
-library(ggiraph)
-library(ggiraphExtra)
-?ggPredict
-fit2 = lm(weight ~ height, data=women)
-ggPredict(fit2,se=TRUE,interactive=TRUE)
-ggPredict(fit2, colorAsFactor = TRUE,interactive=TRUE)

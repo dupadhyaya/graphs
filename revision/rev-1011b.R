@@ -83,3 +83,28 @@ ggplot(uspopage, aes(x=Year, y=Thousands, fill=AgeGroup)) + geom_area()
 #order of Thousands
 
 ggplot(uspopage, aes(x=Year, y=Thousands, fill=AgeGroup)) + geom_area(color='black', size=.2, alpha=.4) + scale_fill_brewer(palette='Blues', breaks=rev(levels(uspopage$AgeGroup)))
+
+ggplot(uspopage, aes(x=Year, y=Thousands, fill=AgeGroup)) + geom_area(color=NA,alpha=.4) + scale_fill_brewer(palette='Blues') + geom_line(position='stack', size=.2)
+
+
+#confidence Region
+months = factor(month.abb[1:12], levels=month.abb[1:12], ordered=T)
+(sturegd = c(60,60,58,58,57,57,57,55,55,55,55,55))
+(stuabsent = ceiling(runif(12,2,5)))
+sturegd-stuabsent
+attend1 = data.frame(months, sturegd, stuabsent)
+attend1
+g = ggplot(attend1, aes(x=months, y=sturegd, group=1))
+g + geom_ribbon(aes(ymin = sturegd - stuabsent, ymax=sturegd + stuabsent), alpha=0.2) + geom_line()
+
+months = factor(month.abb[1:12], levels=month.abb[1:12], ordered=T)
+(AUH_M = trunc(rnorm(12,50,5)))
+(AUUP_L = trunc(rnorm(12,50,5)))
+(AUMP_G = trunc(rnorm(12,50,5)))
+attend2 = data.frame(months, AUH_M, AUUP_L, AUMP_G)
+attend2a = ddply(attend2, 'months', transform, minattend = min(AUH_M, AUUP_L, AUMP_G), maxattend = max(AUH_M, AUUP_L, AUMP_G), avgattend= mean(AUH_M, AUUP_L, AUMP_G))
+attend2a
+g = ggplot(attend2a, aes(x=months, y=avgattend, group=1))
+g1 = g + geom_ribbon(aes(ymin = minattend, ymax=maxattend), alpha=0.2, fill='blue') + geom_line(colour='red') + geom_smooth(colour='darkgreen', fill='green', method='loess') 
+g1 + geom_text(aes(label=avgattend), vjust=0,size=4) + geom_text(aes(label=minattend), vjust=1.5,size=3) + geom_text(aes(label=maxattend), vjust=-1.5, size=5)
+
