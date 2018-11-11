@@ -62,3 +62,24 @@ ggplot(tg, aes(x=dose, y=length, colour=supp)) + geom_line(linetype='dashed') + 
 
 #appearance of points
 ggplot(BOD, aes(x=Time, y=demand)) + geom_line() + geom_point(size=4, shape=22, colour='darkred', fill='pink')
+
+#graph with shaded area
+
+sunspot.year
+sunsspotyear = data.frame(Year = as.numeric(time(sunspot.year)), 
+                          Sunspots = as.numeric(sunspot.year))
+head(sunsspotyear)
+ggplot(data=sunsspotyear, aes(x=Year, y=Sunspots))+ geom_area()
+
+ggplot(data=sunsspotyear, aes(x=Year, y=Sunspots))+ geom_area(fill='blue', color='black', alpha=.2)
+
+ggplot(data=sunsspotyear, aes(x=Year, y=Sunspots))+ geom_area(fill='blue', alpha=.2)
+
+#stacked area graph
+
+head(uspopage)
+uspopage
+ggplot(uspopage, aes(x=Year, y=Thousands, fill=AgeGroup)) + geom_area()
+#order of Thousands
+
+ggplot(uspopage, aes(x=Year, y=Thousands, fill=AgeGroup)) + geom_area(color='black', size=.2, alpha=.4) + scale_fill_brewer(palette='Blues', breaks=rev(levels(uspopage$AgeGroup)))
