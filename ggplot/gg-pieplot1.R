@@ -17,6 +17,13 @@ pie1 + xlab('') +  ylab('') +   labs(fill='Gears')
 
 
 #first draw barplot
-bar <- ggplot(data=mtcars, aes(x = factor(1), fill = factor(gear))) + geom_bar(width = 1)
-bar
+mtcars %>% group_by(gear) %>% tally
+bar <- ggplot(data=mtcars, aes(x = factor(gear), fill = factor(gear))) 
+bar + geom_bar(width = 1)
 bar + geom_bar(position='dodge')
+bar + geom_bar(width = 1) + coord_polar(theta = "y") 
+ggplot(data=mtcars, aes(x=factor(1), fill = factor(gear))) + geom_bar(width = 1) + coord_polar(theta = "y") 
+# 10th, 20th, 30th, total 32 rows
+
+bar + geom_bar(width = 1) + coord_polar(theta = "y") + theme_void() #no labels to area
+bar + geom_bar(position='dodge') + theme(axis.text.x = element_text(angle=65, vjust=0.6))
