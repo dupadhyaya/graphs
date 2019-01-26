@@ -13,25 +13,24 @@ qplot(x=mpg, data=df, geom="histogram", bins=5)
 qplot(x=mpg, data=df, geom="histogram", bins=5, alpha=.8)
 
 qplot(mpg, data=df, geom="density", fill=gear, alpha=I(.5))
-
 #no effect of gear : create gear as factor
-catcols = c('gear','cyl','am','vs','carb')
-df[catcols] = lapply(df[catcols], as.factor)
+df$gear = factor(df$gear)
 qplot(mpg, data=df, geom="density", fill=gear, alpha=I(.5), main="Distribution of Gas Milage", xlab="Miles Per Gallon", ylab="Density")
 
 
 # Scatterplot of mpg vs. hp for each combination of gears and cylinders
 plot(y=df$mpg, x=df$hp, col=df$gear) # for each gear type
-catcols = c('gear','cyl','am','vs','carb')
-df[catcols] = lapply(df[catcols], as.factor)
+df$gear = factor(df$gear)
+df$am = factor(df$am)
+df$cyl = factor(df$cyl)  #error if you do not convert to factors
 #Error: A continuous variable can not be mapped to shape
-str(df)
+
 qplot(x=df$hp, y=df$gear, data=df, col=am)
 qplot(x=df$hp, y=df$gear, data=df, col=am, facets = gear ~ cyl)
 qplot(x=df$hp, y=df$gear, data=df, col=am, facets = gear ~ cyl, shape= am, size=I(3))
 
 # in each facet, transmittion type is represented by shape and color
-qplot(hp, mpg, data=df, shape=am, color=vs, facets=gear~cyl, size=I(3), xlab="Horsepower", ylab="Miles per Gallon") 
+qplot(hp, mpg, data=df, shape=am, color=am, facets=gear~cyl, size=I(3), xlab="Horsepower", ylab="Miles per Gallon") 
 
 
 ## Separate regressions of mpg on weight for each number of cylinders
@@ -40,7 +39,9 @@ qplot(wt, mpg, data=mtcars, geom=c("point"))
 qplot(wt, mpg, data=mtcars, geom=c("smooth")) 
 #combine both geometry : smooth = confindence interval
 qplot(wt, mpg, data=mtcars, geom=c("point", "smooth")) 
+
 qplot(x=wt, y=mpg, data=mtcars, geom=c("point", "smooth"), color=cyl)
+
 qplot(x=wt, y=mpg, data=mtcars, geom=c("point", "smooth"), color=cyl, facets = . ~ gear)
 
 qplot(x=wt, y=mpg, data=mtcars, geom=c("point", "smooth"), color=cyl, facets = cyl ~ .)

@@ -7,3 +7,4 @@
 
 
 ggplot(data, aes(Outlet_Identifier, Item_Type))+ geom_raster(aes(fill = Item_MRP))+ labs(title ="Heat Map", x = "Outlet_Identifier", y = "Item Type")+  scale_fill_continuous(name = "Item MRP")
+

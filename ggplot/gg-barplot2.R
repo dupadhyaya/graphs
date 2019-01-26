@@ -9,6 +9,7 @@ data=data.frame(group=c("A ","B ","C ","D ") , value=c(33,62,56,67) )
 ggplot(data, aes(x = group, y = value ,fill = group )) + 
   geom_bar(width = 0.85, stat="identity")
 
+
 # Circular one
 ggplot(data, aes(x = group, y = value ,fill = group)) + 
   geom_bar(width = 0.85, stat="identity") +    
@@ -27,3 +28,4 @@ ggplot(data, aes(x = group, y = value ,fill = group)) +
   
   #Remove useless legend, y axis ticks and y axis text
   theme(legend.position = "none" , axis.text.y = element_blank() , axis.ticks = element_blank())
+

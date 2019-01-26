@@ -9,7 +9,7 @@ head(Salaries)
 ?Salaries
 
 
-
+data(Salaries, package='carData')
 ggplot(Salaries, aes(x=rank, y=salary)) +
   geom_boxplot( fill='cornflowerblue', color='black', notch=T) +
   geom_point(position='jitter', color='blue', alpha=.5) +

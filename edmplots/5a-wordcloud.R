@@ -22,9 +22,9 @@ wordcloud2::wordcloud2(demoFreq)
 
 library(ggplot2)
 library(ggrepel)
-
+words
 words %>% 
-  slice(1:50) %>%
+  slice(1:50) %>% 
   ggplot +
   aes(x = 1, y = 1, size = freq, label = word) +
   geom_text_repel(segment.size = 0, force = 100) +
