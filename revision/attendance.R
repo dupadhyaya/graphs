@@ -81,5 +81,91 @@ print(b, vp=viewport(width=0.3, height=0.3, x=0.2, y=0.3))
 #venndiagram
 library(systemPipeR)
 setlist5 <- list(A=sample(letters, 18), B=sample(letters, 16), C=sample(letters, 20), D=sample(letters, 22), E=sample(letters, 18))
+setlist5
 OLlist5 <- overLapper(setlist=setlist5, sep="_", type="vennsets")
-vennPlot(OLlist5, mymain="", mysub="", colmode=2, ccol=c("blue", "red"))
+OLlist5
+attributes(OLlist5)
+vennPlot(OLlist5, mymain="Venn Diagram", mysub="default", setlabels = 'default', colmode=2, ccol=c("blue", "red"))
+
+#https://rdrr.io/bioc/systemPipeR/man/vennPlot.html
+#-----
+## Sample data
+setlist <- list(A=sample(letters, 18), B=sample(letters, 16),
+                C=sample(letters, 20), D=sample(letters, 22),
+                E=sample(letters, 18), F=sample(letters, 22))
+## 2-way Venn diagram
+vennset <- overLapper(setlist[1:2], type="vennsets")
+vennPlot(vennset)
+
+## 3-way Venn diagram
+vennset <- overLapper(setlist[1:3], type="vennsets")
+vennPlot(vennset)
+
+## 4-way Venn diagram
+vennset <- overLapper(setlist[1:4], type="vennsets")
+vennPlot(list(vennset, vennset))
+
+## Pseudo 4-way Venn diagram with circles
+vennPlot(vennset, type="circle")
+
+## 5-way Venn diagram
+vennset <- overLapper(setlist[1:5], type="vennsets")
+vennPlot(vennset)
+
+## Alternative Venn count input to vennPlot (not recommended!)
+counts <- sapply(vennlist(vennset), length)
+vennPlot(counts)
+
+## 6-way Venn comparison as bar plot
+vennset <- overLapper(setlist[1:6], type="vennsets")
+olBarplot(vennset, mincount=1)
+
+## Bar plot of standard intersect counts
+interset <- overLapper(setlist, type="intersects")
+olBarplot(interset, mincount=1)
+
+## Accessor methods for VENNset/INTERSECTset objects
+names(vennset)
+names(interset)
+setlist(vennset)
+intersectmatrix(vennset)
+complexitylevels(vennset)
+vennlist(vennset)
+intersectlist(interset)
+
+## Coerce VENNset/INTERSECTset object to list
+as.list(vennset)
+as.list(interset)
+
+## Pairwise intersect matrix and heatmap
+olMA <- sapply(names(setlist), 
+               function(x) sapply(names(setlist), 
+                                  function(y) sum(setlist[[x]] %in% setlist[[y]])))
+olMA
+heatmap(olMA, Rowv=NA, Colv=NA)
+
+## Presence-absence matrices for large numbers of sample sets
+interset <- overLapper(setlist=setlist, type="intersects", complexity=2)
+(paMA <- intersectmatrix(interset))
+heatmap(paMA, Rowv=NA, Colv=NA, col=c("white", "gray")) 
+
+#-----
+#https://harrycaufield.net/severalog/2015/5/7/venn-diagrams-in-r-or-how-to-go-around-in-circles
+library(gplots)
+
+venn(list("Set A"=1:10,"Set B"=0:5))
+venn(list("Set A"=0:10,"Set B"=0:5,"Set C"=5:39,"Set D"=7:80))
+library(venneuler)
+library(VennDiagram)
+venn.plot <- draw.triple.venn(  area1 = 40,  area2 = 33,  area3 = 70,  n12 = 10,  n23 = 10,  n13 = 7,  n123 = 3,  category = c("First", "Second", "Third"),  fill = c("blue", "red", "green"),  lty = "blank",  cex = 2,  cat.cex = 2)
+venn.plot
+
+data(StemCell)
+VennRaw <- Venn(StemCell)
+Venn3 <- VennRaw[, c("OCT4", "SOX2", "NANOG")]
+plot(Venn3, doWeights = FALSE)
+
+
+library(VennDiagram)
+draw.triple.venn(65, 75, 85, 35, 15, 25, 5, c("First", "Second", "Third"))
+#http://www.stats.bris.ac.uk/R/web/packages/VennDiagram/VennDiagram.pdf
