@@ -3,6 +3,16 @@
 library(ggplot2)
 library(dplyr)
 
+# Convert data types-----
+df =  mtcars
+#Convert all category type of columns to factors
+df$column = as.factor(df$column)
+catcols = c('gear','cyl','am','vs','carb')
+df[catcols] = lapply(df[catcols], as.factor)
+df$names = rownames(df)
+str(df)
+
+
 plot(mtcars[,c('wt','mpg')])
 names(mtcars)
 ggplot(data = mtcars, mapping = aes(x = wt, y = mpg)) + geom_point()
@@ -46,14 +56,7 @@ g + xlab('Miles per Gallon')+ylab('Number of Cars')
 g1 <- ggplot(mtcars,aes(x=mpg)) + geom_histogram(binwidth=5, color='red', fill='green')
 g1 + xlab('Miles per Gallon')+ylab('Number of Cars')
 
-# Convert data types
-df =  mtcars
-#Convert all category type of columns to factors
-df$column = as.factor(df$column)
-catcols = c('gear','cyl','am','vs','carb')
-df[catcols] = lapply(df[catcols], as.factor)
-df$names = rownames(df)
-str(df)
+
 
 
 #BarPlot
@@ -341,3 +344,95 @@ n3b = ggplot(df, aes(x=wt, y=mpg, colour=gear, size=qsec, shape=am)) + geom_poin
 n3b
 n3b + labs(shape="Transmission")
 n3b + labs(shape="Transmission", colour="Gear", size='Q-Sec')
+
+#legendTitle
+n4 = ggplot(df, aes(x=am, y=mpg, fill=am)) + geom_boxplot()
+n4
+n4 + theme(legend.title = element_text(face='italic', family='Arial', colour='red', size=14))
+#can also set through guides, but this is easier
+
+#removelegend
+n4
+n4 + guides(fill='none') #this will remove legend
+n4 + guides(fill=guide_legend(title=NULL)) #this will remove title
+n4 + scale_fill_hue(guide=guide_legend(title=NULL))
+
+#changinglabels
+n4
+n4 + scale_fill_discrete(labels=c("Auto Tx",'Manual Tx'))
+#fillscales
+n4 + scale_fill_grey(start=.5, end=1,labels=c("Auto Tx",'Manual Tx'))
+
+#oneVar-2scales
+n5 = ggplot(df, aes(x=wt, y=mpg, shape=gear, colour=gear)) + geom_point()
+n5
+n5 + scale_shape_discrete(labels=c('Gear3','Gear4','Gear5'))
+n5 + scale_shape_discrete(labels=c('Gear3','Gear4','Gear5')) + scale_colour_discrete(labels=c('Gear3','Gear4','Gear5'))
+
+#
+n5b = n5 + scale_shape_discrete(labels=c('Gear3','Gear4','Gear5')) + scale_colour_discrete(labels=c('Gear3','Gear4','Gear5')) 
+n5b + theme(legend.text = element_text(face='italic', family='Arial', colour='red', size=18))
+n5b + guides(fill= guide_legend(label.theme = element_text(face='italic',family ='Arial', colour='red', size=16)))
+
+#multilinetext
+n5c = n5 + scale_shape_discrete(labels=c("Cars with \n 3 gears",'Cars with \n 4 gears','Cars with \n 6 gears')) + scale_colour_discrete(labels=c('Gear3','Gear4','Gear5')) 
+n5c
+n5c + theme(legend.text = element_text(lineheight = .8), legend.key.height = unit(1, 'cm'))  #spacing the labels
+
+
+#FACETS----
+#facet_grid, facet_wrap
+k = ggplot(df, aes(x=wt, y=mpg)) + geom_point()
+k
+k + facet_grid(gear ~ .) #vertically arranged
+k + facet_grid(. ~ gear ) #horiz arranged
+k + facet_grid(am ~ gear ) #V & H arranged
+#2 boxes empty
+#wraparound
+k + facet_wrap(am ~ gear)
+k + facet_wrap( ~ gear) #nothing before ~
+k + facet_wrap(cyl ~ gear, nrow=2)
+k + facet_wrap(cyl ~ gear, ncol=2)
+#diffranges
+k + facet_wrap(cyl ~ gear ) #V & H arranged
+k + facet_wrap(cyl ~ gear, scales='free' ) 
+k + facet_wrap(cyl ~ gear, scales='free_x' ) 
+k + facet_wrap(am ~ gear, scales='free_y' ) 
+#textFacetLabels
+df$am
+df$am = factor(df$am, levels=c(0,1) , labels=c('Auto Tx', 'Manual Tx'))
+?factor
+df$vs = factor(df$vs, levels=c(0,1), labels =c('V-Shaped', 'Straight'))
+#Not working
+?mtcars
+k + facet_wrap( ~ am, labeller = label_both)
+k + facet_wrap(vs ~ am, labeller = label_both)
+k + facet_wrap(vs ~ am, labeller = label_parsed)
+
+# You can assign different labellers to variables:
+k + facet_grid( vs ~ am, labeller = labeller(vs = label_both, am = label_value))
+?labeller
+#facet with 3 columns
+k + facet_wrap(vs + am ~ gear)
+k + facet_wrap(vs  ~ am + gear)
+
+#appearance
+k + facet_wrap( ~ am)
+k + facet_wrap( ~ am, labeller = label_both) + theme(strip.text=element_text(face='bold', size=rel(1.5)), strip.background = element_rect(fill='lightblue', colour='black', size=1))
+
+#12COLORsplot-----
+ggplot(df, aes(x=wt, y=mpg)) + geom_point()
+ggplot(df, aes(x=wt, y=mpg)) + geom_point(colour='red')
+
+ggplot(df, aes(x=mpg)) + geom_histogram(fill='red', colour='black')
+#fill,colour depends upon shape used
+#gear
+df %>% group_by(gear) %>% summarise(n=n()) %>% ggplot(., aes(x=gear, y=n)) + geom_bar(stat='identity')
+#gear
+df %>% group_by(gear) %>% summarise(n=n()) %>% ggplot(., aes(x=gear, y=n, fill=gear)) + geom_bar(stat='identity')
+#gear +cyl
+df %>% group_by(gear, cyl) %>% summarise(n=n()) %>% ggplot(., aes(x=gear, y=n, fill=cyl)) + geom_bar(stat='identity', colour='blue', position='dodge')
+#same-position of fill insided geom_bar
+df %>% group_by(gear, cyl) %>% summarise(n=n()) %>% ggplot(., aes(x=gear, y=n)) + geom_bar(aes(fill=cyl), stat='identity', colour='blue', position='dodge')
+
+#colourbrewer
