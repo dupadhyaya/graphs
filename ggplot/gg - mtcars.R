@@ -6,7 +6,7 @@ library(dplyr)
 # Convert data types-----
 df =  mtcars
 #Convert all category type of columns to factors
-df$column = as.factor(df$column)
+#df$column = as.factor(df$column)
 catcols = c('gear','cyl','am','vs','carb')
 df[catcols] = lapply(df[catcols], as.factor)
 df$names = rownames(df)
@@ -68,7 +68,6 @@ g2 + geom_histogram(binwidth = 5)
 g2 + stat_bin(binwidth = 5)
 g2 + stat_bin(breaks = c(5,10,12,20,30), na.rm=T, fill='lightblue', colour='red')
 g2 + stat_bin(breaks = c(5,10,12,20,30), na.rm=T, fill='lightblue', colour='red') + stat_bin(breaks = c(5,10,12,20,30), geom='text', aes(label=..count..), vjust=1.5)#seperate stat_bin for fill and label
-
 
 
 #BarPlot----

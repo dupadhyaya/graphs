@@ -41,11 +41,16 @@ p + geom_point() + theme_set(theme_wsj())
 
 df %>% group_by(cyl, gear) %>% summarise(n=n()) -> sum1
 ggplot(sum1, aes(x=gear, y=n)) + geom_bar(stat='identity',fill='red')
+ggplot(sum1, aes(x=gear, y=n)) + geom_bar(stat='identity',fill='red')
+
+
 ggplot(sum1, aes(x=gear, y=n, fill=gear)) + geom_bar(stat='identity')
 ggplot(sum1, aes(x=gear, y=n)) + geom_bar(stat='identity', aes(fill=gear))
 
 p2 = ggplot(sum1, aes(x=cyl, y=n, fill=gear)) + geom_bar(stat='identity')
 p2
+
+
 p2 + scale_fill_brewer(type = "qual", palette = "light1")
 ggplot(sum1, aes(x=cyl, y=n, fill=gear)) + geom_bar(stat='identity',fill='red')
 
@@ -73,3 +78,4 @@ m1
 m1 + scale_x_continuous(breaks=c(5,10,15,20,25,30),labels=LETTERS[1:6])
 
 
+autoplot(df)
