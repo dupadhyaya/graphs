@@ -25,8 +25,8 @@ forms2 %>%  group_by(campus,formDate) %>%  summarise_each(list(~sum(!is.na(.))))
 
 library(data.table)
 setDT(forms2)[, lapply(.SD,  function(x) sum(!is.na(x)))]
-setDT(forms2)[, lapply(.SD,  function(x) sum(!is.na(x))),'campus']
-setDT(forms2)[, lapply(.SD,  function(x) sum(!is.na(x))),c('campus','formDate')]
+campusDt1 = setDT(forms2)[, lapply(.SD,  function(x) sum(!is.na(x))),'campus']
+campusDt2 = setDT(forms2)[, lapply(.SD,  function(x) sum(!is.na(x))),c('campus','formDate')]
 
 
 #resphape
@@ -41,3 +41,28 @@ ggplot(forms2b, aes(x=value, y=n, fill= campus)) + geom_bar(stat='identity') + f
 ggplot(forms2b, aes(x=value, y=n, size=n, color=campus)) + geom_point() + facet_grid( variable ~ campus, scales='free') + scale_y_discrete(name=" Numbers", breaks=c(0,1,2,3), labels=c('0','1Forms','2Forms','3Forms'), limits=c(0,3)) +  scale_size_continuous(breaks=c(0,1,2,3,4))
 
 #http://www.sthda.com/english/wiki/ggplot2-axis-ticks-a-guide-to-customize-tick-marks-and-labels
+
+forms1
+forms2
+
+forms2a
+head(forms2a)
+names(forms2a)
+daterange = as.Date('2019-06-01') + 0:50
+daterange
+ggplot(forms2a, aes(x=value, group=campus)) + geom_point() 
+
+forms2b
+forms1
+
+#----
+campusDt2
+head(campusDt2)
+Dates2 = campusDt2$formDate
+Dates2
+xts1 = xts(campusDt2[,-2], order.by=Dates2)
+xts1
+xts1$offerDate = as.numeric(xts1$offerDate)
+xts1    
+
+
